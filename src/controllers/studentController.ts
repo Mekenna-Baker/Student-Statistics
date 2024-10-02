@@ -10,24 +10,27 @@ export const headCount = async () => {
     {
         $count: 'total' //counting total students
     }
-    return numberOfStudents;
+    return numberOfStudents[0]?.total || 0;
+
+    //optional chaining to access total, or return 0 if total is undefined
 }
 
 // Aggregate function for getting the overall grade using $avg
 
 export const grade = async (studentId: string) =>
+
     Student.aggregate([
         // TODO: Ensure we include only the student who can match the given ObjectId using the $match operator
-    {
-        // Your code here
-      },
-      {
-        $unwind: '$assignments',
-      },
-      // TODO: Group information for the student with the given ObjectId alongside an overall grade calculated using the $avg operator
-      {
-        // Your code here
-      },
+        {
+            // Your code here
+        },
+        {
+            $unwind: '$assignments',
+        },
+        // TODO: Group information for the student with the given ObjectId alongside an overall grade calculated using the $avg operator
+        {
+            // Your code here
+        },
     ]);
 
 /**
