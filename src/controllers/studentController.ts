@@ -6,14 +6,16 @@ import { Request, Response } from 'express';
 // TODO: Create an aggregate function to get the number of students overall
 
 export const headCount = async () => {
-    const numberOfStudents = await Student.aggregate()
-    {
-        $count: 'total' 
-    }
-    return numberOfStudents[0]?.total || 0;
+    const numberOfStudents = await Student.aggregate([
+        {
+            $count: 'total' 
+        }
+    ]);
 
+    return numberOfStudents[0]?.total || 0;
+    
 //optional chaining to access total, or return 0 if total is undefined
-}
+};
 
 // Aggregate function for getting the overall grade using $avg
 
