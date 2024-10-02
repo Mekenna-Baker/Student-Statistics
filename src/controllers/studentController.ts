@@ -8,11 +8,11 @@ import { Request, Response } from 'express';
 export const headCount = async () => {
     const numberOfStudents = await Student.aggregate()
     {
-        $count: 'total' //counting total students
+        $count: 'total' 
     }
     return numberOfStudents[0]?.total || 0;
 
-    //optional chaining to access total, or return 0 if total is undefined
+//optional chaining to access total, or return 0 if total is undefined
 }
 
 // Aggregate function for getting the overall grade using $avg
@@ -20,16 +20,22 @@ export const headCount = async () => {
 export const grade = async (studentId: string) =>
 
     Student.aggregate([
-        // TODO: Ensure we include only the student who can match the given ObjectId using the $match operator
+
+// TODO: Ensure we include only the student who can match the given ObjectId using the $match operator
         {
-            // Your code here
+            $match: {_id: new ObjectId(studentId) } //matching student with given ObjectId
         },
+
         {
-            $unwind: '$assignments',
+            $unwind: '$assignments', //deconstructing assignments array, to process each assignment
         },
         // TODO: Group information for the student with the given ObjectId alongside an overall grade calculated using the $avg operator
         {
-            // Your code here
+            $group: {
+                _id: '$_id', //grouping by student id
+
+                averageGrade: { $avg: '$assignments.grade' } //calculating average grade
+            }
         },
     ]);
 
